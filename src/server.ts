@@ -1,18 +1,22 @@
-import { Application } from "https://deno.land/x/oak@v10.6.0/mod.ts";
+import { opine } from "https://deno.land/x/opine@2.2.0/mod.ts";
 import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
-import {
-  Logger,
-  LoggerOptions,
-} from "https://deno.land/x/deno_util@v0.0.3/logger.ts";
+import * as log from "https://deno.land/std@0.148.0/log/mod.ts";
 
-const initialOptions = { level: 0, format: "%s", newLine: true };
-const logger = new Logger(initialOptions as LoggerOptions);
 const { PORT = 4000 } = config({ safe: true });
 
-const app = new Application();
-app.use((cxt) => {
-  cxt.response.body = "Hello GraphQL";
+const app = opine();
+
+app.get("/", (req, res) => {
+  log.info(
+    `${new Date().getTime()} ip:${req.ip} path:${req.url} method:${req.method}`
+  );
+  res
+    .json({
+      message: "Hello world",
+    })
+    .sendStatus(200);
 });
 
-logger.info("Server is running");
-await app.listen({ port: Number(PORT) });
+app.listen(Number(PORT), () =>
+  console.log("server has started on http://localhost:3000 🚀")
+);
