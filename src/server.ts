@@ -3,7 +3,7 @@ import { GraphQLHTTP } from "https://deno.land/x/gql@1.1.2/mod.ts";
 import { makeExecutableSchema } from "https://deno.land/x/graphql_tools@0.0.2/mod.ts";
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
 import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
-// const { PORT = 4000 } = config({ safe: true });
+const { PORT = 4000 } = config({ safe: true });
 
 const typeDefs = gql`
   type Query {
@@ -24,7 +24,8 @@ const app = new Server({
         })(req)
       : new Response("Not Found", { status: 404 });
   },
-  // port: Number(PORT),
+  port: Number(PORT),
+  hostname: "0.0.0.0",
 });
 
 console.log("Server Running!");
